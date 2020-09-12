@@ -1,26 +1,28 @@
 import utils
+from intcode_computer import IntcodeComputer
 
-tape = [int(x) for x in utils.read_lines(2)[0].split(",")]
+program = [int(x) for x in utils.read_lines(2)[0].split(",")]
 
-# print(tape)
+computer = IntcodeComputer()
+computer.load_program_from_int_array(program)
 
 # Init to "1202 program alarm" state
-tape[1] = 12
-tape[2] = 2
+computer.set_address(1, 12)
+computer.set_address(2, 2)
 
-# Execute program
-current_index = 0
-current_op_code = tape[current_index]
+computer.execute()
 
-while(current_op_code != 99):
-	pos1 = tape[current_index + 1]
-	pos2 = tape[current_index + 2]
-	pos3 = tape[current_index + 3]
-	if current_op_code == 1:
-		tape[pos3] = tape[pos1] + tape[pos2]
-	elif current_op_code == 2:
-		tape[pos3] = tape[pos1] * tape[pos2]
-	current_index += 4
-	current_op_code = tape[current_index]
+print(computer.get_address(0))
 
-print(tape[0])
+computer = IntcodeComputer()
+for noun, verb in ((i, j) for i in range(0,100) for j in range(0,100)):
+	print(f"Processing ({noun},{verb})")
+	computer.load_program_from_int_array(program)
+	computer.set_address(1, noun)
+	computer.set_address(2, verb)
+
+	computer.execute()
+
+	if computer.get_address(0) == 19690720:
+		print(f"{noun}, {verb} - {100*noun + verb}")
+		break
