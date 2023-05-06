@@ -1,8 +1,9 @@
 from typing import List
 
 class IntcodeComputer:
-	def __init__(self):
+	def __init__(self, print_outputs=True):
 		self.program = []
+		self.print_outputs = print_outputs
 
 	def load_program_from_string(self, tape: str):
 		self.program = [int(x) for x in tape.split(",")]
@@ -14,6 +15,7 @@ class IntcodeComputer:
 		print(self.program)
 
 	def execute(self, inputs: List[int] = []):
+		outputs = []
 		instruction_pointer = 0
 		op_code = self.program[instruction_pointer]
 
@@ -44,7 +46,9 @@ class IntcodeComputer:
 			
 			elif op_code == 4:
 				params = self._get_parameter_values(1, instruction_pointer)
-				print(params[0])
+				if self.print_outputs:
+					print(params[0])
+				outputs.append(params[0])
 				instruction_pointer += 2
 
 			elif op_code == 5:
@@ -66,6 +70,8 @@ class IntcodeComputer:
 				output_address = self.program[instruction_pointer + 3]
 				self.program[output_address] = 1 if params[0] == params[1] else 0
 				instruction_pointer += 4
+
+		return outputs
 
 	def get_address(self, address: int):
 		return self.program[address]
