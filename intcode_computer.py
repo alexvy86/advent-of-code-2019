@@ -57,6 +57,46 @@ class IntcodeComputer:
 				print(params[0])
 				instruction_pointer += 2
 
+			elif op_code == 5:
+				params = self.program[instruction_pointer + 1 : instruction_pointer + 3]
+				for i in range(len(params)):	
+					if i >= len(param_modes) or param_modes[i] == "0":
+						params[i] = self.program[params[i]]
+				
+				if params[0] != 0:
+					instruction_pointer = params[1]
+				else:
+					instruction_pointer += 3
+
+			elif op_code == 6:
+				params = self.program[instruction_pointer + 1 : instruction_pointer + 3]
+				for i in range(len(params)):	
+					if i >= len(param_modes) or param_modes[i] == "0":
+						params[i] = self.program[params[i]]
+				
+				if params[0] == 0:
+					instruction_pointer = params[1]
+				else:
+					instruction_pointer += 3
+
+			elif op_code == 7:
+				params = self.program[instruction_pointer + 1 : instruction_pointer + 3]
+				output_address = self.program[instruction_pointer + 3]
+				for i in range(len(params)):	
+					if i >= len(param_modes) or param_modes[i] == "0":
+						params[i] = self.program[params[i]]
+				self.program[output_address] = 1 if params[0] < params[1] else 0
+				instruction_pointer += 4
+
+			elif op_code == 8:
+				params = self.program[instruction_pointer + 1 : instruction_pointer + 3]
+				output_address = self.program[instruction_pointer + 3]
+				for i in range(len(params)):	
+					if i >= len(param_modes) or param_modes[i] == "0":
+						params[i] = self.program[params[i]]
+				self.program[output_address] = 1 if params[0] == params[1] else 0
+				instruction_pointer += 4
+
 	def get_address(self, address: int):
 		return self.program[address]
 
